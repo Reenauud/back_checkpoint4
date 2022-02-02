@@ -1,5 +1,8 @@
 const mainRouter = require("express").Router();
+const kingdomRouter = require("./kingdom.route");
+const assetRouter = require("./asset.route");
 
-// Ici mes routers pour mes différentes tables
+mainRouter.use("/kingdom", kingdomRouter);
+mainRouter.use("/asset", assetRouter);
 
 module.exports = mainRouter;

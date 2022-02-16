@@ -1,4 +1,5 @@
 const { Personnage } = require("../models");
+const multer = require("multer");
 
 const createOnePersonnage = async (req, res) => {
   const { name, biographie, image } = req.body;
@@ -18,7 +19,7 @@ const deleteOnePersonnage = async (req, res) => {
   const { id } = req.params;
   try {
     const [results] = await Personnage.deleteOne(id);
-    res.status(200).json(results);
+    res.status(204).json(results);
   } catch (err) {
     res.status(500).send(err.message);
   }
@@ -43,9 +44,31 @@ const getPersonnageById = async (req, res) => {
     res.status(500).send(err.message);
   }
 };
+
+const uploadFile = (req, res, next) => {
+  //configuration du dossier ou stocké l'image, le nom et la bio
+  const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+      cb(null, "./images");
+    },
+    filename: (req, file, cb) => {
+      cb(null, `${Date.now()}-${file.originalname}`);
+    },
+  });
+  const upload = multer({ store: storage }).single("file");
+  upload(req, res, (err) => {
+    if (err) {
+      res.status(500).json(err);
+    } else {
+      res.status(201).json({ filename: req.file.filename });
+    }
+  });
+};
+
 module.exports = {
   createOnePersonnage,
   deleteOnePersonnage,
   getAllPersonnage,
   getPersonnageById,
+  uploadFile,
 };

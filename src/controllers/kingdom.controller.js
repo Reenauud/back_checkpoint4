@@ -27,7 +27,7 @@ const deleteOneKingdom = async (req, res) => {
   const { id } = req.params;
   try {
     const [results] = await Kingdom.deleteOne(id);
-    res.status(200).json(results);
+    res.status(204).json(results);
   } catch (err) {
     res.status(500).send(err.message);
   }

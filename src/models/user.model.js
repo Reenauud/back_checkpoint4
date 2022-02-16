@@ -27,8 +27,13 @@ class User {
     const [results] = await connection.promise().query(sql, [username]);
     return results.length > 0;
   }
-  static validatePassword(password) {
-    return password.length >= 8;
+  static async validatePassword(hashedPassword, password) {
+    const valid = await argon2.verify(hashedPassword, password);
+    return valid;
+  }
+  static async getOneByUserName(username) {
+    const sql = "SELECT * FROM user WHERE username=?";
+    return connection.promise().query(sql, [username]);
   }
 }
 

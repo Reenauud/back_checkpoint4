@@ -10,8 +10,27 @@ const createOneKingdom = async (req, res) => {
     });
     res.status(201).json(results);
   } catch (err) {
-    res.status(500).send("nop");
+    res.status(500).send(err.message);
+  }
+};
+const getkingdomById = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const [results] = await Kingdom.getOneById(id);
+    res.status(200).json(results);
+  } catch (err) {
+    res.status(500).send(err.message);
   }
 };
 
-module.exports = { createOneKingdom };
+const deleteOneKingdom = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const [results] = await Kingdom.deleteOne(id);
+    res.status(204).json(results);
+  } catch (err) {
+    res.status(500).send(err.message);
+  }
+};
+
+module.exports = { createOneKingdom, getkingdomById, deleteOneKingdom };
